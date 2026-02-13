@@ -1,5 +1,5 @@
 Package: montyhall
-Title: What the Package Does (One Line, Title Case)
+Title: Simulate and Analyze the Monty Hall Problem
 Version: 0.0.0.9000
 Authors@R: 
     person("Susan", "Threadgill", , "sthread@gmail.com", role = c("aut", "cre"))
@@ -7,6 +7,8 @@ Description: Provides functions to simulate the Monty Hall game show problem,
 including game creation, door selection, and outcome evaluation.
 The package can be used to explore probability outcomes and
 demonstrate the benefits of switching doors.
+Depends:
+    dplyr
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
