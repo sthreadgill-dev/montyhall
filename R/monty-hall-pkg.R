@@ -17,7 +17,6 @@
 #'   given the option to switch, so this simulation was created
 #'   to test both strategies. 
 #'
-#' @param ... no arguments are used by the function.
 #' 
 #' @return The function returns a length 3 character vector
 #'   indicating the positions of goats and the car.
@@ -35,11 +34,13 @@ create_game <- function()
 
 
 #' @title
+#'  Select the contestant's initial door
 #' @description
-#' @details
-#' @param 
+#'  Randomly selects one of three doors (1,2, or 3) as the contestant's initial door.
 #' @return 
+#'  Returns an integer of 1, 2, or 3
 #' @examples
+#'   select_door()
 #' @export
 select_door <- function( )
 {
@@ -51,12 +52,20 @@ select_door <- function( )
 
 
 #' @title
+#'  Host opens a goat door
 #' @description
-#' @details
-#' @param 
+#'  Decides which door the host opens after the contestant's initial door is selected.
+#'  Always reveals a goat.
+#' @param game A character vector of length 3 created by create_game().
+#' @param a.pick An integer of 1, 2, or 3 indicating the contestant's initial pick.
 #' @return 
+#'  An integer 1, 2, or 3 indicating which door the host opens.
 #' @examples
+#' game <- create_game()
+#' a.pick <- select_door()
+#' open_goat_door(game, a.pick)
 #' @export
+#' 
 open_goat_door <- function( game, a.pick )
 {
    doors <- c(1,2,3)
@@ -77,11 +86,21 @@ open_goat_door <- function( game, a.pick )
 
 
 #' @title
+#'  Contestant stays with their door or switches
 #' @description
-#' @details
-#' @param 
+#' Determines the contestant's final door choice based on whether they
+#' choose to stay with the original pick or switch to the remaining unopened door.
+#' @param stay If TRUE, keep the original pick. If FALSE, switch doors.
+#' @param opened.door An integer of 1, 2, or 3 indicating the door opened by the host.
+#' @param a.pick An integer of 1, 2, or 3 indicating the contestant's initial pick.
 #' @return 
+#'  An integer 1, 2, or 3 indicating the contestant's final pick.
 #' @examples
+#' game <- create_game()
+#' a.pick <- select_door()
+#' opened.door <- open_goat_door(game, a.pick)
+#' change_door(TRUE, opened.door, a.pick)
+#' change_door(FALSE, opened.door, a.pick)
 #' @export
 change_door <- function( stay=T, opened.door, a.pick )
 {
@@ -102,11 +121,17 @@ change_door <- function( stay=T, opened.door, a.pick )
 
 
 #' @title
+#'  Determine outcome of game
 #' @description
-#' @details
-#' @param 
+#'  Evaluates whether the contestant's final pick results in winning the car or not
+#' @param final.pick An integer of 1, 2, or 3 indicating the contestant's final pick.
+#' @param game A character vector of length 3 created by create_game().
 #' @return 
+#' A character string: "WIN" if the final pick contains the car,
+#' otherwise "LOSE".
 #' @examples
+#'   game <- create_game()
+#'   determine_winner(1, game)
 #' @export
 determine_winner <- function( final.pick, game )
 {
@@ -124,12 +149,15 @@ determine_winner <- function( final.pick, game )
 
 
 
-#' @title
+#' @title 
+#'  Play a Monty Hall game
 #' @description
-#' @details
-#' @param 
+#'  Simulates a single Monty Hall game and evaluates both the stay and switch strategies.
 #' @return 
+#'  A data frame with two rows (stay and switch) and a column
+#' indicating whether the outcome was "WIN" or "LOSE".
 #' @examples
+#'   play_game()
 #' @export
 play_game <- function( )
 {
@@ -156,16 +184,19 @@ play_game <- function( )
 
 
 #' @title
+#'  Simulate multiple Monty Hall games
 #' @description
-#' @details
-#' @param 
+#'  Repeats play_game() n times, prints the proportion of wins and losses
+#' for each strategy, and returns the combined results.
+#' @param n Integer. The number of games to simulate.
 #' @return 
+#'  A data frame containing the outcomes for all simulated games.
 #' @examples
+#'   play_n_games(10)
 #' @export
 play_n_games <- function( n=100 )
 {
   
-  library( dplyr )
   results.list <- list()   # collector
   loop.count <- 1
 
@@ -178,10 +209,7 @@ play_n_games <- function( n=100 )
   
   results.df <- dplyr::bind_rows( results.list )
 
-  table( results.df ) %>% 
-  prop.table( margin=1 ) %>%  # row proportions
-  round( 2 ) %>% 
-  print()
+  print(round(prop.table(table(results.df), margin = 1), 2))
   
   return( results.df )
 
